@@ -21,7 +21,7 @@ class TransferList extends StatelessWidget {
         title: Text('Transfers'),
       ),
       body: Column(
-        children: <Widget>[
+        children: [
           TransferItem(Transfer(100.0, 1000)),
           TransferItem(Transfer(200.0, 2000)),
           TransferItem(Transfer(300.0, 3000)),
@@ -66,7 +66,41 @@ class TransferForm extends StatelessWidget {
       appBar: AppBar(
         title: Text('Transfer'),
       ),
-      body: Text('test'),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              style: TextStyle(
+                fontSize: 24.0,
+              ),
+              decoration: InputDecoration(
+                labelText: 'Account number',
+                hintText: '0000',
+              ),
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              style: TextStyle(
+                fontSize: 24.0,
+              ),
+              decoration: InputDecoration(
+                icon: Icon(Icons.monetization_on),
+                labelText: 'Amount',
+                hintText: '0.00',
+              ),
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          RaisedButton(
+            onPressed: () {},
+            child: Text('Confirm'),
+          )
+        ],
+      ),
     );
   }
 }
