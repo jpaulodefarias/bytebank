@@ -7,14 +7,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: TransferList(),
-        appBar: AppBar(
-          title: Text('Transfers'),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: Icon(Icons.add),
-        ),
+        body: TransferForm(),
       ),
     );
   }
@@ -23,12 +16,21 @@ class App extends StatelessWidget {
 class TransferList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        TransferItem(Transfer(100.0, 1000)),
-        TransferItem(Transfer(200.0, 2000)),
-        TransferItem(Transfer(300.0, 3000)),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Transfers'),
+      ),
+      body: Column(
+        children: <Widget>[
+          TransferItem(Transfer(100.0, 1000)),
+          TransferItem(Transfer(200.0, 2000)),
+          TransferItem(Transfer(300.0, 3000)),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
@@ -55,4 +57,16 @@ class Transfer {
   final int accountNumber;
 
   Transfer(this.amount, this.accountNumber);
+}
+
+class TransferForm extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Transfer'),
+      ),
+      body: Text('test'),
+    );
+  }
 }
