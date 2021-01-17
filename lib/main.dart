@@ -7,28 +7,49 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: TransferForm(),
+        body: TransferList(),
       ),
     );
   }
 }
 
-class TransferList extends StatelessWidget {
+class TransferList extends StatefulWidget {
+  final List<Transfer> _transfers = [];
+
+  @override
+  State<StatefulWidget> createState() {
+    return TransferListState();
+  }
+}
+
+class TransferListState extends State<TransferList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Transfers'),
       ),
-      body: Column(
-        children: [
-          TransferItem(Transfer(100.0, 1000)),
-          TransferItem(Transfer(200.0, 2000)),
-          TransferItem(Transfer(300.0, 3000)),
-        ],
+      body: ListView.builder(
+        itemCount: widget._transfers.length,
+        itemBuilder: (context, index) {
+          final item = widget._transfers[index];
+          return TransferItem(item);
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Future<Transfer> future =
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return TransferForm();
+          }));
+          future.then((newTransfer) {
+            if (newTransfer != null) {
+              setState(() {
+                widget._transfers.add(newTransfer);
+              });
+            }
+          });
+        },
         child: Icon(Icons.add),
       ),
     );
@@ -64,7 +85,14 @@ class Transfer {
   }
 }
 
-class TransferForm extends StatelessWidget {
+class TransferForm extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return TransferFormState();
+  }
+}
+
+class TransferFormState extends State<TransferForm> {
   final TextEditingController _accountNumberController =
       TextEditingController();
   final TextEditingController _amountController = TextEditingController();
@@ -75,22 +103,24 @@ class TransferForm extends StatelessWidget {
       appBar: AppBar(
         title: Text('Transfer'),
       ),
-      body: Column(
-        children: [
-          TextEditor(
-              controller: _accountNumberController,
-              label: 'Account number',
-              hint: '0000'),
-          TextEditor(
-              controller: _amountController,
-              label: 'Amount',
-              hint: '0.00',
-              icon: Icons.monetization_on),
-          RaisedButton(
-            onPressed: () => _createTransfer(context),
-            child: Text('Confirm'),
-          )
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            TextEditor(
+                controller: _accountNumberController,
+                label: 'Account number',
+                hint: '0000'),
+            TextEditor(
+                controller: _amountController,
+                label: 'Amount',
+                hint: '0.00',
+                icon: Icons.monetization_on),
+            RaisedButton(
+              onPressed: () => _createTransfer(context),
+              child: Text('Confirm'),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -101,12 +131,7 @@ class TransferForm extends StatelessWidget {
 
     if (accountNumber != null && amount != null) {
       final newTransfer = Transfer(amount, accountNumber);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('$newTransfer'),
-        ),
-      );
+      Navigator.pop(context, newTransfer);
     }
   }
 }
